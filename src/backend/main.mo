@@ -22,10 +22,8 @@ actor {
     createdAt : Int;
   };
 
-  module Record {
-    public func compare(record1 : Record, record2 : Record) : Order.Order {
-      Nat.compare(record1.id, record2.id);
-    };
+  func compareRecords(record1 : Record, record2 : Record) : Order.Order {
+    Nat.compare(record1.id, record2.id);
   };
 
   let records = Map.empty<Nat, Record>();
@@ -67,7 +65,8 @@ actor {
   };
 
   public query ({ caller }) func getAllRecords() : async [Record] {
-    records.values().toArray().sort();
+    let arr = records.values().toArray();
+    arr.sort(compareRecords);
   };
 
   public query ({ caller }) func getRecord(id : Nat) : async Record {
